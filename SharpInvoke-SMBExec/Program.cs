@@ -11,7 +11,6 @@ using System.DirectoryServices;
 using System.Security.Principal;
 using System.DirectoryServices.ActiveDirectory;
 using System.Threading.Tasks;
-using System.Net;
 
 namespace SharpInvoke_SMBExec
 {
@@ -34,9 +33,7 @@ namespace SharpInvoke_SMBExec
 
             if (args.Length == 3)
             {
-                IPNetwork targetNetwork = IPNetwork.Parse(args[2]);
-                IPAddressCollection ips = targetNetwork.ListIPAddress();
-                targets = ips.Select(ip => ip.ToString()).ToList();
+                targets = new IPRange(args[2]).GetAllIP().Select(ip => ip.ToString()).ToList();
             }
             else
             {
@@ -47,6 +44,7 @@ namespace SharpInvoke_SMBExec
             {
                 try
                 {
+                    //Console.WriteLine(t);
                     run(t, username, hash);
                 }
                 catch (Exception e)
