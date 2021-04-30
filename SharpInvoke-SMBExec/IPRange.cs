@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace SharpInvoke_SMBExec
 {
+    // from https://stackoverflow.com/questions/4172677/c-enumerate-ip-addresses-in-a-range
     internal class IPRange
     {
         public IPRange(string ipRange)

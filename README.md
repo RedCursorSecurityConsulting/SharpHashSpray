@@ -3,7 +3,7 @@ Check for local admin access using the provided username and NTLM hash.
 
 By default SharpHashSpray will automatically fetch a list of all domain joined hosts to check. The tool must be executed within the context of a domain user for this to work.
 
-Alternatively a target range can be provided in the format 192.168.0.0/24, 192.168.0.0/255.255.255.0, 192.168.0.0-192.168.0.255. 
+Alternatively a target range can be provided in CIDR notation (e.g. 192.168.0.0/24) or in the format 192.168.0-255.0-255.
 
 SharpHashSpray does not require admin or any special privileges.
 
